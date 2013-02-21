@@ -3,18 +3,18 @@ import select
 
 HOST = ''
 PORT = 10000
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-server.bind((HOST, PORT))
-server.listen(5)
-server.settimeout(0.0001)
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+s.bind((HOST, PORT))
+s.listen(5)
+s.settimeout(0.0001)
 print 'Listening on port: ', PORT
 
 connections = []
 chatlog=[]
 while True:
 	try:
-		conn, addr = server.accept()
+		conn, addr = s.accept()
 		conn.settimeout(0.0001)
 		print 'Connection accepted from:', addr
 		connections.append((conn, addr))

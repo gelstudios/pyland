@@ -19,6 +19,8 @@ def logsave(list, filename):
 	f.close()
 	
 def inquire(prompt, response, contains):
+	"""a
+	"""
 	knock = None
 	while knock == None:
 		logprint(prompt, session)
