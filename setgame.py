@@ -1,19 +1,38 @@
 import random
 
 class Card(object):
-	"""this represents a set Card"""
-	def __init__(self, color, number, shape, fill):
-		self.color=color
-		self.number=number
-		self.shape=shape
-		self.fill=fill
+	"""this class represents a set Card"""
+	def __init__( self, color, number, shape, fill ):
+		self.color = color
+		self.number = number
+		self.shape = shape
+		self.fill = fill
 
 	def __repr__(self):
 		return "<" + self.color + str(self.number) + self.shape + str(self.fill) + ">"
 		pass
 
+class Board(object):
+	"""this class represents the game board"""
+	def __init__( self ):
+		self.positions =  []
+		self.deck = []
+		pass
+
+	def deal( self, num_cards ):
+		"appends num_cards to list to parent's deck"
+		#get int cards from the deck, append to game board
+		for n in xrange(0, num_cards, 1):
+			random.shuffle(self.deck)
+			pick = random.randint(0, len(self.deck)-1)
+			self.positions.append(self.deck.pop(pick))
+		pass
+
+	def draw():	
+		"""placeholder for drawing a card"""
+		pass
+
 def generate_cards():
-	"""returns a list of cards"""
 	color = ['red','green','purple']
 	number = [1,2,3]
 	shape = ['~','o','v']
@@ -27,7 +46,7 @@ def generate_cards():
 					cards.append(new_card)
 	return cards
 
-def check_hand(card1, card2, card3):
+def check_hand( card1, card2, card3 ):
 	attribute_list = ['color', 'number', 'shape', 'fill']
 	conditions_met = []
 	for a in attribute_list:
@@ -40,11 +59,39 @@ def check_hand(card1, card2, card3):
 			conditions_met.append(a)
 	return conditions_met
 
+def hash_hand( *cards ):
+	attribute_list = ['color', 'number', 'shape', 'fill']
+	conditions_met = set()
+	for c in cards:
+		for a in attribute_list:
+			condition = getattr(c, a)
+			conditions_met.add(condition)
+	print repr(conditions_met)
+	if len(conditions_met)==len(cards):
+		print "unique set found: " + repr(cards)
+	elif len(conditions_met)==len(cards):
+		print "set found: " + repr(cards)
+	else:
+		pass
+
+def newdemo():
+	deck = generate_cards()
+	hand = []
+	for n in 1, 2, 3:
+		random.shuffle(deck)
+		pick = random.randint(0, len(deck)-1)
+		hand.append(deck.pop(pick))
+	print 'checking this hand:', repr(hand)
+	matches = chk_hnd(*hand)
+	#print matches
+	#	print 'set found:', repr(hand)
+	#pass
 
 def demoplay():
 	deck = generate_cards()
 	hand = []
 	for n in 1, 2, 3:
+		random.shuffle(deck)
 		pick = random.randint(0, len(deck)-1)
 		#hand.append(deck[pick])
 		hand.append(deck.pop(pick))
@@ -56,5 +103,9 @@ def demoplay():
 		print 'set found:', repr(hand)
 	pass
 
-
+def play():
+	game = Board()
+	game.deck = generate_cards()
+	game.deal(12)
+	return game
 

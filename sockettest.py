@@ -1,5 +1,5 @@
 import socket
-import select
+#import select
 
 HOST = ''
 PORT = 10000
@@ -20,6 +20,9 @@ while True:
 		connections.append((conn, addr))
 	except socket.timeout:
 		pass
+	except 
+		pass
+	pass 
 	#except for disconnect or connection reset?
 	
 	for conn, addr in connections:
