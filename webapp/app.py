@@ -1,7 +1,7 @@
 import bottle
 import pymongo
 import os
-from bottle import route, request, post
+from bottle import route, request, post, template
 
 @route('/')
 def index():
@@ -12,18 +12,26 @@ def index():
 	db = connection['test'] # get our test db
 	bbs = db.bbs # get our bbs colleWe ction
 	#message = bbs.find_one() #get a message
-	messages = bbs.find() #get all the messages!
+	docs = bbs.find() #get all the messages!
 	content = []
-	for message in messages:
-		content.append( '<b>poster: %s</b>' % message.get('account','Anon') + '<br>' + '<b>status: %s</b>' % message.get('status','new') + '<br>' + '<b>message: %s</b>' % message.get('msg', '...') + '<br><br>' )
-	return content + ['<br><form action="/postmsg" method="post"> Account: <input type="text" name="account"><br>Message: <input type="text" name="message"><br><input type="submit" formmethod="post" formaction="/postmsg" value="post my message"></form>']
+	for document in docs:
+		content.append( '<b>Poster:</b> %s' % document.get('account','Anon') + '<br>' + '<b>status:</b> %s' % document.get('status','new') + '<br>' + '<b>message:</b> %s' % document.get('msg', '...') + '<br><br>' )
+	return content + ['<br><form action="/postmsg" method="get"> Account: <input type="text" name="account"><br>Message: <input type="text" name="message"><br><input type="submit" formmethod="get" formaction="/postmsg" value="post my message"></form>']
 
 #@route('/postmsg', method='POST')
-@post
+#fresh
+
+@route('/postmsg')
+#@post('/postmsg')
 def postmsg():
-	account = request.forms.get('account')
-	message = request.forms.get('message')
+#	account = request.forms.get('account')
+#	message = request.forms.get('message')
 	#get post data
+
+#get 'get parameters'
+	account = request.query.get('account')
+	message = request.query.get('message')
+
 	post_data = {'account':account,'msg':message, 'status':'new'}
 	try:
 		connection = pymongo.MongoClient('localhost', 27017) # try get db connection
