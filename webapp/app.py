@@ -13,10 +13,9 @@ def index():
 	bbs = db.bbs # get our bbs colleWe ction
 	#message = bbs.find_one() #get a message
 	docs = bbs.find() #get all the messages!
-	content = []
-	for document in docs:
-		content.append( '<b>Poster:</b> %s' % document.get('account','Anon') + '<br>' + '<b>status:</b> %s' % document.get('status','new') + '<br>' + '<b>message:</b> %s' % document.get('msg', '...') + '<br><br>' )
-	return content + ['<br><form action="/postmsg" method="get"> Account: <input type="text" name="account"><br>Message: <input type="text" name="message"><br><input type="submit" formmethod="get" formaction="/postmsg" value="post my message"></form>']
+	print repr(docs)
+	return template('index', messages=docs) 
+	#content + ['<br><form action="/postmsg" method="get"> Account: <input type="text" name="account"><br>Message: <input type="text" name="message"><br><input type="submit" formmethod="get" formaction="/postmsg" value="post my message"></form>']
 
 #@route('/postmsg', method='POST')
 #fresh
