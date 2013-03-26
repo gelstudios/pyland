@@ -7,13 +7,12 @@ from bottle import route, request, post, template
 def index():
 	try:
 		connection = pymongo.MongoClient('localhost', 27017) # try get db connection
-	except ConnectionFailure:
+	except:
 		return 'Sorry! We could not connect to the database'
 	db = connection['test'] # get our test db
 	bbs = db.bbs # get our bbs colleWe ction
 	#message = bbs.find_one() #get a message
 	docs = bbs.find() #get all the messages!
-	print repr(docs)
 	return template('index', messages=docs) 
 	#content + ['<br><form action="/postmsg" method="get"> Account: <input type="text" name="account"><br>Message: <input type="text" name="message"><br><input type="submit" formmethod="get" formaction="/postmsg" value="post my message"></form>']
 
