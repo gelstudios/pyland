@@ -1,6 +1,6 @@
 <title>tinybbs</title>
 <div class=topbar>
-<h1>Login</h1>
+<h1>tinybbs login</h1>
 </div>
 <br>
 <form action="/login" method="post"> <!--# method="post"-->

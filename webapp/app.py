@@ -10,7 +10,7 @@ def index():
 	except:
 		return 'Sorry! We could not connect to the database'
 	db = connection['test'] # get our test db
-	bbs = db.bbs # get our bbs colleWe ction
+	bbs = db.bbs # get our bbs collection
 	#message = bbs.find_one() #get a message
 	docs = bbs.find() #get all the messages!
 	return template('index', messages=docs) 
@@ -43,21 +43,11 @@ def postmsg():
 @route('/users')
 @route('/users/')
 def login():
-	body = 'this is some txt, pretend you see a fake login page'
-	return t2html( body, 'body')
+	return template( login,)
 
 @route('/users/<userid>')
 def user( userid ):
-	if userid == None:
-		return 'this is the a fancy login page'
-	else:
-		return t2html( 'hello ' + userid, 'body') + t2html('/message', 'link')
-
-def t2html( text, tag ):
-	if tag == 'link':
-		return '<a href="' + text + '">' + text + '</a>'
-	else:
-		return '<' + tag + '>' + text + '</' + tag + '>'
+	pass
 
 def main():
 	bottle.run(host='localhost', port=8080, debug=True, reloader=True)
