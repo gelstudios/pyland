@@ -5,6 +5,7 @@ class Game(object):
 	def __init__( self ):
 		self.positions = []
 		self.deck = generateCards()
+		self.players = []
 
 	def deal( self, num_cards ):
 		"removes num_cards from the parent's deck, and inserts them in the positions list"
@@ -67,20 +68,7 @@ def generateCards():
 					cards.append(newCard)
 	return cards
 
-#def oldCheckHand( card1, card2, card3 ):
-#	attribute_list = ['color', 'number', 'shape', 'fill']
-#	conditions_met = []
-#	for a in attribute_list:
-#		x = getattr(card1, a)
-#		y = getattr(card2, a)
-#		z = getattr(card3, a)
-#		if x == y == z:
-#			conditions_met.append(a)
-#		elif x != y and y != z and x != z:
-#			conditions_met.append(a)
-#	return conditions_met
-
-def demo():
+def do():
 	import os
 	game = Game()
 	game.deal(12)
@@ -88,15 +76,14 @@ def demo():
 	player.tmpPositions = game.positions 
 	while len(player.hand) < 3:
 		os.system('clear')
-		print "hello" + player.name
+		print "hello " + player.name
 		print "game board:"
 		print repr(player.tmpPositions[0:3])
 		print repr(player.tmpPositions[4:7])
-		print repr(playet.tmpPositions[8:11])
+		print repr(player.tmpPositions[8:11])
 		print 
-		print
-		print "your hand: " + repr(hand)
-		print "score: " + player.score + " pts"
+		print "your hand: " + repr(player.hand)
+		print "score: " + str(player.score) + " pts"
 		userInput = raw_input("Pick a card>")
 		try:
 			player.hand.append(player.tmpPositions.pop(int(userInput)))
