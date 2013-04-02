@@ -96,7 +96,6 @@ def do():
 		print 'set found:', repr(player.hand)
 		player.score += 1
 
-
 #	myhand=[ Card('red', 1,'~',0), Card('red', 1, 'o', 50), Card('red', 1, 'v', 100) ]
 #	game.checkhand(*hand)
 	pass
