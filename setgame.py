@@ -34,6 +34,13 @@ class Game(object):
 		else:
 			return False
 
+class Player(object):
+	def __init__( self, uid, name ):
+		self.uid = uid
+		self.name = name
+		self.score = 0
+		self.hand = []
+
 class Card(object):
 	"""this class represents a set-game Card"""
 	def __init__( self, color, number, shape, fill ):
@@ -76,27 +83,32 @@ def generateCards():
 def demo():
 	import os
 	game = Game()
-	hand = []
 	game.deal(12)
-	tmpPositions = game.positions
-	while len(hand) < 3:
+	player = Player( 1203812039821, "eric" )
+	player.tmpPositions = game.positions 
+	while len(player.hand) < 3:
 		os.system('clear')
+		print "hello" + player.name
 		print "game board:"
-		print repr(tmpPositions[0:3])
-		print repr(tmpPositions[4:7])
-		print repr(tmpPositions[8:11])
+		print repr(player.tmpPositions[0:3])
+		print repr(player.tmpPositions[4:7])
+		print repr(playet.tmpPositions[8:11])
 		print 
+		print
 		print "your hand: " + repr(hand)
+		print "score: " + player.score + " pts"
 		userInput = raw_input("Pick a card>")
 		try:
-			hand.append(tmpPositions.pop(int(userInput)))
+			player.hand.append(player.tmpPositions.pop(int(userInput)))
 		except:
 			print "not a valid choice"
 		pass
-	print 'checking this hand:', repr(hand)
-	matches = game.checkHand(*hand)
+	print 'checking this hand:', repr(player.hand)
+	matches = game.checkHand(*player.hand)
 	if matches == True:
-		print 'set found:', repr(hand)
+		print 'set found:', repr(player.hand)
+		player.score += 1
+
 
 #	myhand=[ Card('red', 1,'~',0), Card('red', 1, 'o', 50), Card('red', 1, 'v', 100) ]
 #	game.checkhand(*hand)
