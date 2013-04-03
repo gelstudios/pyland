@@ -1,11 +1,15 @@
 import random
+import itertools
 
 class Game(object):
 	"""the global game class, the game state is represented here"""
-	def __init__( self ):
+	def __init__( self, *players ):
+		self.attributeList = ['color', 'number', 'shape', 'fill']
 		self.positions = []
 		self.deck = generateCards()
 		self.players = []
+		self.deal(12)
+		self.addPlayers(*players)
 
 	def deal( self, num_cards ):
 		"removes num_cards from the parent's deck, and inserts them in the positions list"
@@ -16,31 +20,65 @@ class Game(object):
 			self.positions.append(self.deck.pop(pick))
 		pass
 
-	def checkHand( *cards ):
-		attributeList = ['color', 'number', 'shape', 'fill']
+	def checkHand( self, *cards ):
 		matches=0
-		cards=cards[1:]
-		#print "repr of cards is: " + repr(cards)
-		for a in attributeList:
+		for a in self.attributeList:
 			check = set()
 			for c in cards:
 				cardAttribute = getattr(c, a)
 				check.add(cardAttribute)
-			#print repr(check)
 			if len(check)==len(cards) or len(check) == 1:
-				#print a + " set found: " + repr(cards)
 				matches += 1
-		if matches == len(attributeList):
+		if matches == len(self.attributeList):
 			return True
 		else:
 			return False
 
+	def checkBoard( self ):
+		"""checks board for any sets, deals 3 more if none"""
+		matches = 0
+		hands = itertools.combinations(self.positions, 3)
+		for h in hands:
+			match = self.checkHand(*h)
+			if match == True:
+				print "sets on board: " + repr(h)
+				matches += 1
+		if matches == 0:
+			self.deal(3)
+		pass
+
+	def addPlayers( self, *players ):
+		"""adds Player objects to game Class"""
+		for p in players:
+			self.players.append(p)
+			p.parent = self
+		pass
+
 class Player(object):
-	def __init__( self, uid, name ):
+	"""this class represents a player. requires a uid and string name """
+	def __init__(self, uid, name):
 		self.uid = uid
 		self.name = name
 		self.score = 0
 		self.hand = []
+
+	def pickCard( self, card_id ):
+		card=self.parent.positions[card_id]
+		print repr(card)
+		if card in self.hand:
+			return
+		self.hand.append(card)
+		if len(self.hand) == 3:
+			h=self.parent.checkHand(*self.hand)
+			if h:
+				self.score += 1
+				for card in self.hand:
+					self.parent.positions.remove(card)
+				self.parent.deal(3)
+				self.hand = []
+			else:
+				self.hand = []
+
 
 class Card(object):
 	"""this class represents a set-game Card"""
@@ -51,7 +89,7 @@ class Card(object):
 		self.fill = fill
 
 	def __repr__(self):
-		return "<" + self.color + str(self.number) + self.shape + str(self.fill) + ">"
+		return "-" + self.color + str(self.number) + self.shape + str(self.fill) + "-"
 		pass
 
 def generateCards():
@@ -69,33 +107,26 @@ def generateCards():
 	return cards
 
 def do():
-	import os
-	game = Game()
-	game.deal(12)
+	"""demo method"""
 	player = Player( 1203812039821, "eric" )
-	player.tmpPositions = game.positions 
+	game = Game( player )
 	while len(player.hand) < 3:
-		os.system('clear')
 		print "hello " + player.name
 		print "game board:"
-		print repr(player.tmpPositions[0:3])
-		print repr(player.tmpPositions[4:7])
-		print repr(player.tmpPositions[8:11])
-		print 
+		print repr(game.positions[0:3])
+		print repr(game.positions[4:7])
+		print repr(game.positions[8:11])
+		if len(game.positions) > 12:
+			print repr(game.positions[12:14])
+		print
 		print "your hand: " + repr(player.hand)
 		print "score: " + str(player.score) + " pts"
 		userInput = raw_input("Pick a card>")
-		try:
-			player.hand.append(player.tmpPositions.pop(int(userInput)))
-		except:
-			print "not a valid choice"
-		pass
-	print 'checking this hand:', repr(player.hand)
+		player.hand.append(int(userInput))
+	print "checking this hand: ", repr(player.hand)
 	matches = game.checkHand(*player.hand)
 	if matches == True:
 		print 'set found:', repr(player.hand)
 		player.score += 1
-
 #	myhand=[ Card('red', 1,'~',0), Card('red', 1, 'o', 50), Card('red', 1, 'v', 100) ]
-#	game.checkhand(*hand)
 	pass
