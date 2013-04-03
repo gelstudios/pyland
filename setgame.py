@@ -3,13 +3,13 @@ import itertools
 
 class Game(object):
 	"""the global game class, the game state is represented here"""
-	def __init__( self, *players ):
+	def __init__( self, player ):
 		self.attributeList = ['color', 'number', 'shape', 'fill']
 		self.positions = []
 		self.deck = generateCards()
-		self.players = []
+		self.players = {}
 		self.deal(12)
-		self.addPlayers(*players)
+		self.addPlayers(player)
 
 	def deal( self, num_cards ):
 		"removes num_cards from the parent's deck, and inserts them in the positions list"
@@ -50,7 +50,7 @@ class Game(object):
 	def addPlayers( self, *players ):
 		"""adds Player objects to game Class"""
 		for p in players:
-			self.players.append(p)
+			self.players[p.uid]=p
 			p.parent = self
 		pass
 
