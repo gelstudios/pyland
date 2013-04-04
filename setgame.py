@@ -17,8 +17,10 @@ class Game(object):
 		for n in xrange(0, num_cards, 1):
 			random.shuffle(self.deck)
 			pick = random.randint(0, len(self.deck)-1)
-			self.positions.append(self.deck.pop(pick))
-		pass
+			try:
+				self.positions.append(self.deck.pop(pick))
+			except:
+				return len(self.deck)
 
 	def checkHand( self, *cards ):
 		matches=0
@@ -45,14 +47,12 @@ class Game(object):
 				matches += 1
 		if matches == 0:
 			self.deal(3)
-		pass
 
 	def addPlayers( self, *players ):
 		"""adds Player objects to game Class"""
 		for p in players:
 			self.players[p.uid]=p
 			p.parent = self
-		pass
 
 class Player(object):
 	"""this class represents a player. requires a uid and string name """
@@ -62,23 +62,24 @@ class Player(object):
 		self.score = 0
 		self.hand = []
 
-	def pickCard( self, card_id ):
+	def pickCard(self, card_id):
 		card=self.parent.positions[card_id]
-		print repr(card)
 		if card in self.hand:
 			return
-		self.hand.append(card)
-		if len(self.hand) == 3:
-			h=self.parent.checkHand(*self.hand)
-			if h:
-				self.score += 1
-				for card in self.hand:
-					self.parent.positions.remove(card)
-				self.parent.deal(3)
-				self.hand = []
-			else:
-				self.hand = []
-
+		if card in self.parent.positions:	
+			self.hand.append(card)
+			if len(self.hand) == 3:
+				h=self.parent.checkHand(*self.hand)
+				if h:
+					self.score += 1
+					for card in self.hand:
+						self.parent.positions.remove(card)
+					d = self.parent.deal(3)
+					if d > 0:
+						self.parent.deal(d)
+					self.hand = []
+				else:
+					self.hand = []
 
 class Card(object):
 	"""this class represents a set-game Card"""
@@ -90,7 +91,6 @@ class Card(object):
 
 	def __repr__(self):
 		return "-" + self.color + str(self.number) + self.shape + str(self.fill) + "-"
-		pass
 
 def generateCards():
 	color = ['red','green','purple']
@@ -129,4 +129,3 @@ def do():
 		print 'set found:', repr(player.hand)
 		player.score += 1
 #	myhand=[ Card('red', 1,'~',0), Card('red', 1, 'o', 50), Card('red', 1, 'v', 100) ]
-	pass

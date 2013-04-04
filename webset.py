@@ -2,8 +2,15 @@ from bottle import route, run, template, redirect
 import random
 import setgame
 
-game=None
 games={}
+
+def draw(card):
+	jcard={}
+	jcard[color]=card.color
+	jcard[number]=card.number
+	jcard[shape]=card.shape
+	jcard[fill]=card.fill
+	return jcard
 
 @route("/")
 def lobby():
@@ -18,25 +25,29 @@ def startgame():
 	player=setgame.Player(uid,"PlayerName")
 	game=setgame.Game(player)
 	games[game_id]=game
-	return template('board', game=game, game_id=game_id, uid=uid)
+	return template('board', game=game, game_id=game_id, uid=uid, draw=draw)
 
 @route("/play/<game_id:int>")
 @route("/play/<game_id:int>/<uid:int>")
 @route("/play/<game_id:int>/<uid:int>/<card_id:int>")
 def play(game_id, uid=None, card_id=None):
-	game=games[game_id]
-	if uid:
+	if game_id in games:
+		game=games[game_id]
+	else:
+		redirect("/")
+	if uid in game.players:
 		player=game.players[uid]
-		if card_id!=None:
+		print "hand in player obj: " + repr(player.hand)
+		if card_id != None:
 			player.pickCard(card_id)
 	else:
 		uid=hash(random.random())
 		player=setgame.Player(uid,"PlayerName")
 		game.addPlayers(player)
-	return template('board', game=game, game_id=game_id, uid=uid)
+	return template('board', game=game, game_id=game_id, uid=uid, draw=draw)
 
 @route("/noset/<game_id:int>/<uid:int>")
-def noset(game_id,uid):
+def noset(game_id, uid):
 	game=games[game_id]
 	game.checkBoard()
 	redirect("/play/" + str(game_id) + "/" + str(uid))
@@ -52,7 +63,6 @@ def admin():
 
 def main():
 	run(host='localhost', port=8080, debug=True, reloader=True)
-	pass
 
 if __name__ == '__main__':
 	main()
