@@ -1,4 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
 <title>SetGame</title>
+<link rel="stylesheet" type="text/css" href="static/style.css">
+</head>
+
+<body>
 <div class=topbar>
 <h3>Set Game</h3>
 </div>
@@ -10,7 +17,12 @@
 <div class=board>
 %for i, p in enumerate(game.positions):
 	<div class=card>
-	<a href="/play/{{game_id}}/{{uid}}/{{i}}">{{repr(p)}}</a>
+	<a href="/play/{{game_id}}/{{uid}}/{{i}}">
+		::{{p.number}}
+		::{{p.color}}
+		::{{p.shape}}
+		::{{p.fill}}
+	</a>
 	</div>
 %end
 </div>
@@ -32,3 +44,5 @@
 	<div class=player><p>Name: {{j.name}} ({{j.uid}}) Score: {{j.score}} pts</p></div>
 %end
 </div>
+</body>
+</html>

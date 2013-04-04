@@ -1,4 +1,4 @@
-from bottle import route, run, template, redirect
+from bottle import route, run, template, redirect, static_file, error
 import random
 import setgame
 
@@ -56,10 +56,11 @@ def noset(game_id, uid):
 def admin():
 	status={}
 	status["games"]=games.keys()
-	#for g in status["games"]:
-	#	status["games"][g]["players"]=games[g].players
-	#	status["games"][g]["deck"]=len(games[g].deck)
 	return status
+
+@route("/static/<filename>")
+def static(filename):
+    return static_file(filename, root="./")
 
 def main():
 	run(host='localhost', port=8080, debug=True, reloader=True)
