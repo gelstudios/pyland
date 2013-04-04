@@ -20,7 +20,6 @@ class Game(object):
 			try:
 				self.positions.append(self.deck.pop(pick))
 			except:
-				return len(self.deck)
 
 	def checkHand( self, *cards ):
 		matches=0
@@ -43,7 +42,7 @@ class Game(object):
 		for h in hands:
 			match = self.checkHand(*h)
 			if match == True:
-				print "sets on board: " + repr(h)
+				print "sets on the board: " + repr(h)
 				matches += 1
 		if matches == 0:
 			self.deal(3)
@@ -65,7 +64,7 @@ class Player(object):
 	def pickCard(self, card_id):
 		card=self.parent.positions[card_id]
 		if card in self.hand:
-			return
+			return None
 		if card in self.parent.positions:	
 			self.hand.append(card)
 			if len(self.hand) == 3:
@@ -74,12 +73,8 @@ class Player(object):
 					self.score += 1
 					for card in self.hand:
 						self.parent.positions.remove(card)
-					d = self.parent.deal(3)
-					if d > 0:
-						self.parent.deal(d)
-					self.hand = []
-				else:
-					self.hand = []
+					self.parent.deal(3)
+				self.hand = []
 
 class Card(object):
 	"""this class represents a set-game Card"""

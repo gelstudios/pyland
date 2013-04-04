@@ -18,10 +18,7 @@
 %for i, p in enumerate(game.positions):
 	<div class=card>
 	<a href="/play/{{game_id}}/{{uid}}/{{i}}">
-		::{{p.number}}
-		::{{p.color}}
-		::{{p.shape}}
-		::{{p.fill}}
+		<span class=number>{{p.number}}</span> {{p.color}} :: {{p.shape}} :: {{p.fill}} ::
 	</a>
 	</div>
 %end
