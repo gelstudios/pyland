@@ -20,6 +20,7 @@ class Game(object):
 			try:
 				self.positions.append(self.deck.pop(pick))
 			except:
+				return
 
 	def checkHand( self, *cards ):
 		matches=0

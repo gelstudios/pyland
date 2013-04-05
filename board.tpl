@@ -6,6 +6,7 @@
 </head>
 
 <body>
+
 <div class=topbar>
 <h3>Set Game</h3>
 </div>
@@ -41,5 +42,6 @@
 	<div class=player><p>Name: {{j.name}} ({{j.uid}}) Score: {{j.score}} pts</p></div>
 %end
 </div>
+
 </body>
 </html>
