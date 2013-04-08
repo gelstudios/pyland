@@ -1,7 +1,5 @@
 import re
 
-#socket.listen
-
 session = []
 def logprint(msg, list):
 	"""Prints the log message and appends it to a given list
