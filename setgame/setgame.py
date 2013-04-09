@@ -104,7 +104,7 @@ def generateCards():
 
 def do():
 	"""demo method"""
-	player = Player( 1203812039821, "eric" )
+	player = Player( 1203812039821, "kitten" )
 	game = Game( player )
 	while len(player.hand) < 3:
 		print "hello " + player.name

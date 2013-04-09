@@ -58,9 +58,9 @@ def admin():
 	status["games"]=games.keys()
 	return status
 
-@route("/static/<filename>")
-def static(filename):
-    return static_file(filename, root="./static/")
+@route("/static/<filepath:path>")
+def static(filepath):
+    return static_file(filepath, root="./static/")
 
 def main():
 	run(host='localhost', port=8080, debug=True, reloader=True)
