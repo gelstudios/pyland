@@ -14,7 +14,6 @@ def index():
 	#message = bbs.find_one() #get a message
 	docs = bbs.find() #get all the messages!
 	return template('index', messages=docs) 
-	#content + ['<br><form action="/postmsg" method="get"> Account: <input type="text" name="account"><br>Message: <input type="text" name="message"><br><input type="submit" formmethod="get" formaction="/postmsg" value="post my message"></form>']
 
 #@route('/postmsg', method='POST')
 #fresh
@@ -48,6 +47,10 @@ def login():
 @route('/users/<userid>')
 def user( userid ):
 	pass
+
+@route("/static/<filepath:path>")
+def static(filepath):
+    return static_file(filepath, root="./static/")
 
 def main():
 	bottle.run(host='localhost', port=8080, debug=True, reloader=True)
