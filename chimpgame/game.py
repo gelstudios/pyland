@@ -8,7 +8,7 @@ follow along in the tutorial.
 
 
 #Import Modules
-import os, pygame
+import os, pygame, random
 from pygame.locals import *
 
 if not pygame.font: print 'Warning, fonts disabled'
@@ -79,8 +79,10 @@ class Chimp(pygame.sprite.Sprite):
         self.image, self.rect = load_image('chimp.bmp', -1)
         screen = pygame.display.get_surface()
         self.area = screen.get_rect()
-        self.rect.topleft = 10, 10
-        self.move = 9
+        self.seed = hash(random.random())
+        self.rect.topleft = 10,10
+        self.movex = 9
+        self.movey = 9
         self.dizzy = 0
 
     def update(self):
@@ -92,12 +94,14 @@ class Chimp(pygame.sprite.Sprite):
 
     def _walk(self):
         "move the monkey across the screen, and turn at the ends"
-        newpos = self.rect.move((self.move, 0))
-        if self.rect.left < self.area.left or \
-           self.rect.right > self.area.right:
-            self.move = -self.move
-            newpos = self.rect.move((self.move, 0))
+        newpos = self.rect.move((self.movex, self.movey))
+        if self.rect.left < self.area.left or self.rect.right > self.area.right:
+            self.movex = -self.movex
+            newpos = self.rect.move((self.movex, self.movey+1))
             self.image = pygame.transform.flip(self.image, 1, 0)
+        if self.rect.top < self.area.top or self.rect.bottom > self.area.bottom:
+            self.movey = -self.movey
+            newpos = self.rect.move((self.movex+1, self.movey))
         self.rect = newpos
 
     def _spin(self):
@@ -125,7 +129,7 @@ def main():
        a loop until the function returns."""
 #Initialize Everything
     pygame.init()
-    screen = pygame.display.set_mode((468, 60))
+    screen = pygame.display.set_mode((468, 240))
     pygame.display.set_caption('Monkey Fever')
     pygame.mouse.set_visible(0)
 
@@ -149,9 +153,11 @@ def main():
     clock = pygame.time.Clock()
     whiff_sound = load_sound('whiff.wav')
     punch_sound = load_sound('punch.wav')
-    chimp = Chimp()
+    chimps = []
+    chimps.append( Chimp() )
+    #chimp = Chimp()
     fist = Fist()
-    allsprites = pygame.sprite.RenderPlain((fist, chimp))
+    allsprites = pygame.sprite.RenderPlain((fist, chimps))
 
 #Main Loop
     while 1:
@@ -164,11 +170,13 @@ def main():
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 return
             elif event.type == MOUSEBUTTONDOWN:
-                if fist.punch(chimp):
-                    punch_sound.play() #punch
-                    chimp.punched()
-                else:
-                    whiff_sound.play() #miss
+                for chimp in chimps:
+                    if fist.punch(chimp):
+                        punch_sound.play() #punch
+                        chimp.punched()
+                        chimps.append(Chimp())
+                    else:
+                        whiff_sound.play() #miss
             elif event.type is MOUSEBUTTONUP:
                 fist.unpunch()
 
