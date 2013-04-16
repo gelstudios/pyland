@@ -79,10 +79,9 @@ class Chimp(pygame.sprite.Sprite):
         self.image, self.rect = load_image('chimp.bmp', -1)
         screen = pygame.display.get_surface()
         self.area = screen.get_rect()
-        self.seed = hash(random.random())
-        self.rect.topleft = 10,10
-        self.movex = 9
-        self.movey = 9
+        self.rect.topleft = 10, 10
+        self.movex = random.choice([-10, -9, -6, 6, 9, 10])
+        self.movey = random.choice([-10, -9, -6, 6, 9, 10])
         self.dizzy = 0
 
     def update(self):
@@ -97,11 +96,11 @@ class Chimp(pygame.sprite.Sprite):
         newpos = self.rect.move((self.movex, self.movey))
         if self.rect.left < self.area.left or self.rect.right > self.area.right:
             self.movex = -self.movex
-            newpos = self.rect.move((self.movex, self.movey+1))
+            newpos = self.rect.move((self.movex, self.movey))
             self.image = pygame.transform.flip(self.image, 1, 0)
         if self.rect.top < self.area.top or self.rect.bottom > self.area.bottom:
             self.movey = -self.movey
-            newpos = self.rect.move((self.movex+1, self.movey))
+            newpos = self.rect.move((self.movex, self.movey))
         self.rect = newpos
 
     def _spin(self):
@@ -118,6 +117,8 @@ class Chimp(pygame.sprite.Sprite):
 
     def punched(self):
         "this will cause the monkey to start spinning"
+        self.movex *= -1
+        self.movey *= -1
         if not self.dizzy:
             self.dizzy = 1
             self.original = self.image
@@ -129,7 +130,7 @@ def main():
        a loop until the function returns."""
 #Initialize Everything
     pygame.init()
-    screen = pygame.display.set_mode((468, 240))
+    screen = pygame.display.set_mode((500, 500))
     pygame.display.set_caption('Monkey Fever')
     pygame.mouse.set_visible(0)
 
@@ -141,9 +142,13 @@ def main():
 #Put Text On The Background, Centered
     if pygame.font:
         font = pygame.font.Font(None, 36)
-        text = font.render("Pummel The Chimp, And Win $$$", 1, (10, 10, 10))
+        text = font.render("Punch The Monkeys", 1, (10, 10, 10))
         textpos = text.get_rect(centerx=background.get_width()/2)
         background.blit(text, textpos)
+        #scoretext = font.render(str(len(chimps)) + " monkeys running amok", 1, (10,10,10))
+        #scoretextpos = text.get_rect(centerx=background.get_width()/2,)
+
+
 
 #Display The Background
     screen.blit(background, (0, 0))
@@ -174,12 +179,14 @@ def main():
                     if fist.punch(chimp):
                         punch_sound.play() #punch
                         chimp.punched()
-                        chimps.append(Chimp())
+                        chimps.append( Chimp() ) # add a chimp!
+
                     else:
                         whiff_sound.play() #miss
             elif event.type is MOUSEBUTTONUP:
                 fist.unpunch()
 
+        allsprites = pygame.sprite.RenderPlain((fist, chimps))
         allsprites.update()
 
     #Draw Everything
