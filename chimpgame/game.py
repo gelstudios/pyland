@@ -1,13 +1,4 @@
 #/usr/bin/env python
-"""
-This simple example is used for the line-by-line tutorial
-that comes with pygame. It is based on a 'popular' web banner.
-Note there are comments here, but for the full explanation, 
-follow along in the tutorial.
-"""
-
-
-#Import Modules
 import os, pygame, random
 from pygame.locals import *
 
@@ -125,9 +116,6 @@ class Chimp(pygame.sprite.Sprite):
 
 
 def main():
-    """this function is called when the program starts.
-       it initializes everything it needs, then runs in
-       a loop until the function returns."""
 #Initialize Everything
     pygame.init()
     screen = pygame.display.set_mode((500, 500))
@@ -147,8 +135,6 @@ def main():
         background.blit(text, textpos)
         #scoretext = font.render(str(len(chimps)) + " monkeys running amok", 1, (10,10,10))
         #scoretextpos = text.get_rect(centerx=background.get_width()/2,)
-
-
 
 #Display The Background
     screen.blit(background, (0, 0))
@@ -195,7 +181,6 @@ def main():
         pygame.display.flip()
 
 #Game Over
-
 
 #this calls the 'main' function when this script is executed
 if __name__ == '__main__': main()
